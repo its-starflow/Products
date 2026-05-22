@@ -2,6 +2,8 @@
   <img src="https://raw.githubusercontent.com/its-starflow/Aero/Core/Images/Logo.png" width="250" alt="Aero Logo">
 </p>
 
+> Version: 0.5
+
 Aero is a clean and simple GUI library for Roblox focused on being easy to use and easy to customize.
 
 It works in both executors and Roblox Studio without needing different setup code.
