@@ -35,13 +35,6 @@ Aero:Notify()         -- Notification popup
 local Aero = loadstring(game:HttpGet("https://raw.githubusercontent.com/its-starflow/Aero/Core/Source"))()
 ```
 
-After loading:
-
-```lua
-Aero:New("Element")({})
-Aero:Notify("Hello", 3)
-```
-
 ---
 
 ## Method 2 — ModuleScript
@@ -54,6 +47,13 @@ Require it from a LocalScript:
 
 ```lua
 local Aero = require(game.ReplicatedStorage.Aero)
+```
+
+After loading:
+
+```lua
+Aero:New("Element")({})
+Aero:Notify("Hello", 3)
 ```
 
 ---
