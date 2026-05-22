@@ -1,51 +1,48 @@
-# License
+# Fair Use Public License
 
 Copyright (c) StarFlow
 
-Permission is hereby granted, to any person obtaining a copy of this software and associated files (the "Software"), to use the Software under the following terms and conditions.
+---
+
+## Permissions
+
+You are allowed to:
+
+- Use the software for personal use
+- Modify the software for personal use
+- Study and learn from the software
 
 ---
 
-## 1. Permitted Use
+## Restrictions
 
-You are permitted to:
+You are NOT allowed to:
 
-- Use the Software for personal use
-- Modify the Software for personal use
-- Study and learn from the Software
-
----
-
-## 2. Restrictions
-
-You are strictly prohibited from:
-
-- Redistributing, re-uploading, or publishing any original or modified versions of the Software
-- Claiming ownership or authorship of the Software or any derived work
-- Presenting the Software or modified versions as your own creation
-- Selling or monetizing the Software in any form
+- Fork this repository
+- Re-upload this software or any modified version of it
+- Redistribute this software in any form
+- Publish modified versions of this software
+- Claim this software or any modified version as your own work
+- Remove credits or ownership notices
+- Sell, sublicense, or monetize this software
 
 ---
 
-## 3. Ownership
+## Ownership
 
-All rights, title, and ownership of the Software remain with StarFlow.
+All rights, ownership, and authorship remain with StarFlow.
 
----
-
-## 4. Disclaimer
-
-The Software is provided "as is", without warranty of any kind, express or implied.  
-The author is not responsible for any damage, loss, or issues arising from the use of the Software.
+Using this software does not grant ownership rights.
 
 ---
 
-## 5. Validity
+## Disclaimer
 
-This license applies from the time of access and remains valid indefinitely, including and extending to all use "to today" and beyond, unless explicitly replaced by a newer version issued by the author.
+This software is provided "as is" without warranties or guarantees of any kind.  
+The author is not responsible for damages, issues, or losses caused by the use of this software.
 
 ---
 
-## Credits
+## Validity
 
-Original work created by StarFlow.
+This license applies indefinitely from the moment the software is accessed.
