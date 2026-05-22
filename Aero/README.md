@@ -44,10 +44,8 @@ Aero:Notify("Hello", 3)
 
 ## Method 2 — ModuleScript
 
-1. Create a ModuleScript named `Aero`
-2. Open the `Source` file from the GitHub repository
-3. Copy the source code
-4. Paste it into the ModuleScript
+1. Download the Aero.rbxmx file.
+2. Drag and drop the file into your Roblox game's workspace.
 5. Put it somewhere like `ReplicatedStorage`
 
 Require it from a LocalScript:
