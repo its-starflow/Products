@@ -1,0 +1,1408 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Meta name="ExplicitAutoJoints">true</Meta>
+	<External>null</External>
+	<External>nil</External>
+	<Item class="Folder" referent="RBX134ECDE3988B45BD8A50776AC952F992">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<string name="Name">Void-Sentinel</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<BinaryString name="Tags"></BinaryString>
+		</Properties>
+		<Item class="ModuleScript" referent="RBX60F1BB7CEE864487ADF29E92597DE910">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[local Settings = {
+	Enabled = true,
+
+	Detection = {
+		AntiBackdoor = true, -- Detects suspicious scripts trying to control the game
+		AntiRemoteSpam = true, -- Detects RemoteEvent spam
+
+		AntiFly = true, -- Prevents players from flying around
+		AntiNoclip = true, -- Stops players from walking through walls
+		AntiSpeed = true, -- Detects abnormal movement speed
+		AntiTeleport = true, -- Detects instant position changes
+		AntiReach = true, -- Prevents players from hitting from unrealistic distances
+
+		AntiGodMode = true, -- Prevents players from becoming invincible
+	},
+
+	Punishments = {
+		Kick = true,
+		Warn = true,
+
+		-- Amount of detections before punishment is applied.
+		MaxDetections = 3,
+
+		-- Time before detection count resets.
+		DetectionCooldown = 5
+	},
+
+	Thresholds = {
+		Movement = {
+			-- Extra leniency for lag/ping differences.
+			PositionTolerance = 8,
+
+			-- Delay before movement checks start after spawning.
+			GraceTime = 3,
+
+			-- Max allowed horizontal movement before flagged as teleporting.
+			MaxHorizontalTeleportDistance = 80,
+
+			-- Max allowed vertical movement before flagged.
+			MaxVerticalTeleportDistance = 120,
+
+			-- General teleport distance limit used by movement checks.
+			TeleportDistance = 100
+		},
+
+		Remote = {
+			-- Max RemoteEvent requests allowed in the time window.
+			MaxRequests = 40,
+
+			-- How long requests are tracked for.
+			TimeWindow = 1
+		},
+
+		Character = {
+			-- Allowed walkspeeds used in your game.
+			WhitelistedWalkSpeeds = {
+				16,
+				32
+			},
+
+			-- Allowed jump powers used in your game.
+			WhitelistedJumpPowers = {
+				50,
+				75
+			}
+		},
+
+		Rules = {
+			-- Ignores the first teleport after spawning.
+			IgnoreFirstTeleport = true
+		},
+
+		MovementWhitelistParts = {
+			-- Parts that are allowed to launch or move players.
+			-- Remove example before publishing.
+			game.Workspace.Map.Other.Trampoline.JumpHitbox
+		}
+	},
+
+	Debug = {
+		-- Prints anti-cheat logs/errors in the output.
+		PrintErrors = true
+	}
+}
+
+return Settings]]></ProtectedString>
+				<string name="ScriptGuid">{1A8B4FBB-9C8F-48A6-B0DB-FDF67038A576}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">Settings</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+		</Item>
+		<Item class="Script" referent="RBX23A7C7B3E93747FD81EDD5AA49451D2D">
+			<Properties>
+				<ProtectedString name="Source"><![CDATA[local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Detections = script.Parent:WaitForChild("Detections")
+local ClientFolder = script.Parent:WaitForChild("VS-Client")
+local Notify = ClientFolder:WaitForChild("Notify")
+
+local RemotesFolder = script.Parent:WaitForChild("VS-Remotes")
+local NotifyEvent = RemotesFolder:WaitForChild("NotifyEvent")
+
+RemotesFolder:Clone().Parent = ReplicatedStorage
+
+Players.PlayerAdded:Connect(function(Player)
+	Player.CharacterAdded:Connect(function()
+		local PlayerGui = Player:WaitForChild("PlayerGui")
+
+		if not PlayerGui:FindFirstChild("VS-Client") then
+			ClientFolder:Clone().Parent = PlayerGui
+		end
+	end)
+end)
+
+for _, Module in pairs(Detections:GetChildren()) do
+	if Module:IsA("ModuleScript") then
+		require(Module)
+	end
+end]]></ProtectedString>
+				<bool name="Disabled">false</bool>
+				<Content name="LinkedSource"><null></null></Content>
+				<token name="RunContext">0</token>
+				<string name="ScriptGuid">{6439D893-D055-438D-AE2D-2381C9444475}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">Setup</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+		</Item>
+		<Item class="LocalScript" referent="RBX31CB99523A624379A010DB9ED000A3AB">
+			<Properties>
+				<ProtectedString name="Source"><![CDATA[--[[
+
+	Welcome to Void-Sentinel [Beta v0.1]!
+
+	Setup:
+	1. Place the "Void-Sentinel" folder inside ServerScriptService.
+	2. Configure the anticheat in the "Settings" module script.
+
+	Optional:
+	- You may delete this README script.
+
+	Customization:
+	- You are allowed to modify the anticheat for personal use.
+	- Rebranding or republishing it as your own project is not allowed.
+
+	Important:
+	- Void-Sentinel is still in active development.
+	- Bugs and false positives may happen.
+
+--]]]]></ProtectedString>
+				<bool name="Disabled">true</bool>
+				<Content name="LinkedSource"><null></null></Content>
+				<token name="RunContext">0</token>
+				<string name="ScriptGuid">{2376A0F4-C5FD-4FAB-A107-817803800013}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">README</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+		</Item>
+		<Item class="Folder" referent="RBX1BB2B46A7BD74836B83A75B0DD5D6A97">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">Detections</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+			<Item class="ModuleScript" referent="RBX516561FC0292497C91E19436EDA3CD75">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[local AntiBackdoor = {}
+
+math.randomseed(tick() + os.clock())
+
+local Settings = require(script.Parent.Parent:WaitForChild("Settings"))
+
+if not Settings.Enabled or not Settings.Detection.AntiBackdoor then
+	return AntiBackdoor
+end
+
+local Punish = require(script.Parent.Parent:WaitForChild("Utils"):WaitForChild("Punish"))
+
+local function GetService(ServiceName)
+	local Success, Service = pcall(game.GetService, game, ServiceName)
+	while not Success or not Service do
+		task.wait()
+		Success, Service = pcall(game.GetService, game, ServiceName)
+	end
+	return Service
+end
+
+local ReplicatedStorage = GetService("ReplicatedStorage")
+local Workspace = GetService("Workspace")
+local HttpService = GetService("HttpService")
+
+local Characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+;:',.<>/?\\|`~"
+local SafeCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
+
+local TrapRemotes = {}
+local KickedPlayers = {}
+
+local function Randomize(Length, Safe)
+	local CharacterSet = Safe and SafeCharacters or Characters
+	local String = ""
+
+	for i = 1, Length do
+		local Index = math.random(1, #CharacterSet)
+		String ..= CharacterSet:sub(Index, Index)
+	end
+
+	return String
+end
+
+local function GetRandomContainer(Parent)
+	local Valid = {}
+
+	for _, Object in ipairs(Parent:GetDescendants()) do
+		if Object:IsA("Folder") or Object:IsA("Model") or Object:IsA("Configuration") then
+			table.insert(Valid, Object)
+		end
+	end
+
+	if #Valid > 0 then
+		return Valid[math.random(1, #Valid)]
+	end
+
+	return Parent
+end
+
+local function ObfuscateRemote(Remote)
+	Remote.Name = Randomize(math.random(32, 64))
+	Remote:SetAttribute(Randomize(8, true), HttpService:GenerateGUID(false))
+	Remote:SetAttribute(Randomize(10, true), Randomize(20))
+	Remote:SetAttribute(Randomize(12, true), math.random(100000, 999999))
+	Remote:SetAttribute(Randomize(14, true), tick())
+	Remote.Archivable = false
+end
+
+local function KillPlayer(Player, Reason)
+	if not Player or KickedPlayers[Player] then
+		return
+	end
+
+	KickedPlayers[Player] = true
+
+	Punish:Kick(Player, "AntiBackdoor", Reason)
+end
+
+local function CreateTrapRemote(Parent)
+	local Container = GetRandomContainer(Parent)
+	local Remote = Instance.new("RemoteEvent")
+
+	ObfuscateRemote(Remote)
+	Remote.Parent = Container
+
+	Remote.OnServerEvent:Connect(function(Player)
+		KillPlayer(Player, "Backdoor remote triggered")
+	end)
+
+	return Remote
+end
+
+local function EnsureTrap(LocationName, Parent)
+	local Existing = TrapRemotes[LocationName]
+	if Existing and Existing.Parent then
+		return
+	end
+
+	local Success, Remote = pcall(function()
+		return CreateTrapRemote(Parent)
+	end)
+
+	if Success and Remote then
+		TrapRemotes[LocationName] = Remote
+	end
+end
+
+EnsureTrap("Workspace", Workspace)
+EnsureTrap("ReplicatedStorage", ReplicatedStorage)
+
+task.spawn(function()
+	while true do
+		task.wait(math.random(30, 90))
+		EnsureTrap("Workspace", Workspace)
+		EnsureTrap("ReplicatedStorage", ReplicatedStorage)
+	end
+end)
+
+game:GetService("Players").PlayerRemoving:Connect(function(Player)
+	KickedPlayers[Player] = nil
+end)
+
+return AntiBackdoor]]></ProtectedString>
+					<string name="ScriptGuid">{1D3359DA-500A-4894-BA0D-4A4F572DCDD5}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">AntiBackdoor</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBXB2B7885CE4AE47AB96AD88BF22DF1E8E">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[local AntiNoclip = {}
+
+local Settings = require(script.Parent.Parent:WaitForChild("Settings"))
+
+if not Settings.Enabled or not Settings.Detection.AntiNoclip then
+	return AntiNoclip
+end
+
+local Punish = require(script.Parent.Parent:WaitForChild("Utils"):WaitForChild("Punish"))
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+
+local PlayerData = {}
+
+local MIN_DISTANCE_CHECK = 1
+local MAX_CHECK_DISTANCE = 35 -- Slightly increased to account for fast vehicles
+
+local RaycastParams = RaycastParams.new()
+RaycastParams.FilterType = Enum.RaycastFilterType.Exclude
+
+local function IsCharacterValid(Character)
+	if not Character then
+		return false
+	end
+
+	local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+	local RootPart = Character:FindFirstChild("HumanoidRootPart")
+
+	return Humanoid and RootPart
+end
+
+local function ResetPlayer(Player)
+	PlayerData[Player] = nil
+end
+
+local function SetupCharacter(Player, Character)
+	local RootPart = Character:WaitForChild("HumanoidRootPart")
+
+	PlayerData[Player] = {
+		LastPosition = RootPart.Position,
+		LastSafePosition = RootPart.Position,
+	}
+end
+
+local function SetupPlayer(Player)
+	Player.CharacterAdded:Connect(function(Character)
+		SetupCharacter(Player, Character)
+	end)
+
+	if Player.Character then
+		task.spawn(SetupCharacter, Player, Player.Character)
+	end
+end
+
+Players.PlayerAdded:Connect(SetupPlayer)
+
+for _, Player in ipairs(Players:GetPlayers()) do
+	task.spawn(SetupPlayer, Player)
+end
+
+Players.PlayerRemoving:Connect(ResetPlayer)
+
+RunService.Heartbeat:Connect(function()
+	for _, Player in ipairs(Players:GetPlayers()) do
+		local Data = PlayerData[Player]
+		local Character = Player.Character
+
+		if not Data or not IsCharacterValid(Character) then
+			continue
+		end
+
+		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+		local RootPart = Character:FindFirstChild("HumanoidRootPart")
+
+		if not Humanoid or Humanoid.Health <= 0 then
+			continue
+		end
+
+		local CurrentSeat = Humanoid.SeatPart
+		local TargetPart = RootPart
+		local IgnoreInstances = { Character }
+
+		if CurrentSeat and CurrentSeat:IsA("BasePart") then
+			TargetPart = CurrentSeat
+
+			local VehicleModel = CurrentSeat:FindFirstAncestorOfClass("Model")
+			if VehicleModel then
+				table.insert(IgnoreInstances, VehicleModel)
+			else
+				table.insert(IgnoreInstances, CurrentSeat)
+			end
+		end
+
+		local CurrentPosition = TargetPart.Position
+		local LastPosition = Data.LastPosition
+
+		local Direction = CurrentPosition - LastPosition
+		local Distance = Direction.Magnitude
+
+		if Distance < MIN_DISTANCE_CHECK then
+			continue
+		end
+
+		if Distance > MAX_CHECK_DISTANCE then
+			Data.LastPosition = CurrentPosition
+			continue
+		end
+
+		RaycastParams.FilterDescendantsInstances = IgnoreInstances
+
+		local Result = Workspace:Raycast(LastPosition, Direction, RaycastParams)
+
+		if Result and Result.Instance and Result.Instance.CanCollide then
+			if CurrentSeat then
+				local VehicleModel = CurrentSeat:FindFirstAncestorOfClass("Model")
+				local AssemblyPart = CurrentSeat.AssemblyRootPart or CurrentSeat
+
+				AssemblyPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+				AssemblyPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+
+				if VehicleModel and VehicleModel:PrimaryPart() then
+					VehicleModel:PivotTo(CFrame.new(Data.LastSafePosition))
+				else
+					CurrentSeat.CFrame = CFrame.new(Data.LastSafePosition)
+				end
+			else
+				RootPart.CFrame = CFrame.new(Data.LastSafePosition)
+			end
+
+			if Punish:AddDetection(Player, "AntiNoclip") then
+				return
+			end
+		else
+			Data.LastSafePosition = CurrentPosition
+		end
+
+		Data.LastPosition = CurrentPosition
+	end
+end)
+
+return AntiNoclip]]></ProtectedString>
+					<string name="ScriptGuid">{E3236BE0-523B-4F58-AF6D-A7095DDBEE4D}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">AntiNoclip</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX36A23353BF174FC989C02180333C0BA9">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[local AntiFly = {}
+
+local Settings = require(script.Parent.Parent:WaitForChild("Settings"))
+
+if not Settings.Enabled or not Settings.Detection.AntiFly then
+	return AntiFly
+end
+
+local Punish = require(script.Parent.Parent:WaitForChild("Utils"):WaitForChild("Punish"))
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+
+local FlySettings = {
+	Intervals = 10,
+	MaxDistanceFromGround = Vector3.new(0, -18, 0),
+	MaxAirTime = 2,
+	MinimumFlySpeed = 35,
+	AddPlatformStandStrike = true
+}
+
+local PlayerData = {}
+local CurrentInterval = 0
+
+local MovementSettings = Settings.Thresholds.Movement
+
+local function ResetPlayer(Player)
+	PlayerData[Player] = nil
+end
+
+local function IsInsideWhitelistedPart(RootPart)
+	for _, Part in ipairs(Settings.Thresholds.MovementWhitelistParts) do
+		if Part and Part:IsA("BasePart") then
+			local Relative = Part.CFrame:PointToObjectSpace(RootPart.Position)
+			local Half = Part.Size / 2
+
+			if math.abs(Relative.X) <= Half.X
+				and math.abs(Relative.Y) <= Half.Y
+				and math.abs(Relative.Z) <= Half.Z then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+local function SetupPlayer(Player)
+	Player.CharacterAdded:Connect(function()
+		PlayerData[Player] = {
+			BoostTime = 0,
+			BoostPosition = nil,
+			BoostWalkSpeed = 0,
+
+			LastGrounded = tick(),
+			LastPosition = nil
+		}
+	end)
+end
+
+Players.PlayerAdded:Connect(SetupPlayer)
+
+for _, Player in ipairs(Players:GetPlayers()) do
+	task.spawn(SetupPlayer, Player)
+end
+
+Players.PlayerRemoving:Connect(ResetPlayer)
+
+RunService.Heartbeat:Connect(function()
+	CurrentInterval += 1
+
+	if CurrentInterval < FlySettings.Intervals then
+		return
+	end
+
+	CurrentInterval = 0
+
+	local Ignore = {}
+
+	for _, Player in ipairs(Players:GetPlayers()) do
+		if Player.Character then
+			table.insert(Ignore, Player.Character)
+		end
+	end
+
+	local RaycastParams = RaycastParams.new()
+	RaycastParams.FilterType = Enum.RaycastFilterType.Exclude
+	RaycastParams.FilterDescendantsInstances = Ignore
+
+	for _, Player in ipairs(Players:GetPlayers()) do
+		local Data = PlayerData[Player]
+		local Character = Player.Character
+
+		if not Data or not Character then
+			continue
+		end
+
+		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+		local RootPart = Character:FindFirstChild("HumanoidRootPart")
+
+		if not Humanoid or not RootPart or Humanoid.Health <= 0 then
+			continue
+		end
+
+		local now = tick()
+
+		if IsInsideWhitelistedPart(RootPart) then
+			Data.BoostTime = now
+			Data.BoostPosition = RootPart.Position
+			Data.BoostWalkSpeed = Humanoid.WalkSpeed
+
+			Data.LastGrounded = now
+		end
+
+		local InBoostGrace =
+			(now - Data.BoostTime) <= MovementSettings.GraceTime
+
+		local FoundGround = Workspace:Raycast(
+			RootPart.Position,
+			FlySettings.MaxDistanceFromGround,
+			RaycastParams
+		)
+
+		local Velocity = RootPart.AssemblyLinearVelocity
+
+		local HorizontalSpeed =
+			Vector3.new(Velocity.X, 0, Velocity.Z).Magnitude
+
+		local VerticalVelocity = Velocity.Y
+
+		local IsFalling = VerticalVelocity < -2
+
+		if FoundGround or IsFalling then
+			Data.LastGrounded = now
+			Data.LastPosition = RootPart.Position
+			continue
+		end
+
+		local AirTime = now - Data.LastGrounded
+
+		if AirTime < FlySettings.MaxAirTime then
+			continue
+		end
+
+		local Detected = false
+
+		if FlySettings.AddPlatformStandStrike
+			and Humanoid:GetState() == Enum.HumanoidStateType.PlatformStanding then
+			Detected = true
+		end
+
+		if HorizontalSpeed >= FlySettings.MinimumFlySpeed then
+			Detected = true
+		end
+
+		if InBoostGrace and Data.BoostPosition then
+			local Delta =
+				Vector3.new(RootPart.Position.X, 0, RootPart.Position.Z)
+			- Vector3.new(Data.BoostPosition.X, 0, Data.BoostPosition.Z)
+
+			local Allowed =
+				(Data.BoostWalkSpeed * (now - Data.BoostTime))
+				+ MovementSettings.PositionTolerance
+
+			if Delta.Magnitude > Allowed then
+				Detected = true
+			end
+		end
+
+		if Detected then
+			if Data.LastPosition then
+				RootPart.CFrame = CFrame.new(Data.LastPosition)
+			end
+
+			if Punish:AddDetection(Player, "AntiFly") then
+				return
+			end
+		end
+	end
+end)
+
+return AntiFly]]></ProtectedString>
+					<string name="ScriptGuid">{EDA074C4-11D0-484F-B426-9CF15380BC29}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">AntiFly</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX8AC0AFEF09AC4B74A790320343B0F742">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[local AntiSpeed = {}
+
+local Settings = require(script.Parent.Parent:WaitForChild("Settings"))
+
+if not Settings.Enabled or not Settings.Detection.AntiSpeed then
+	return AntiSpeed
+end
+
+local Players = game:GetService("Players")
+
+local Punish = require(script.Parent.Parent:WaitForChild("Utils"):WaitForChild("Punish"))
+
+local CharacterSettings = Settings.Thresholds.Character
+
+local function IsWhitelistedSpeed(Speed)
+	for _, Allowed in ipairs(CharacterSettings.WhitelistedWalkSpeeds) do
+		if math.abs(Speed - Allowed) <= 0.1 then
+			return true
+		end
+	end
+
+	return false
+end
+
+local function SetupCharacter(Player, Character)
+	local Humanoid = Character:WaitForChild("Humanoid", 10)
+
+	if not Humanoid then
+		return
+	end
+
+	Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+		if Humanoid.Health <= 0 then
+			return
+		end
+
+		local Speed = Humanoid.WalkSpeed
+
+		if not IsWhitelistedSpeed(Speed) then
+			if Punish:AddDetection(Player, "AntiSpeed") then
+				return
+			end
+		end
+	end)
+
+	if not IsWhitelistedSpeed(Humanoid.WalkSpeed) then
+		if Punish:AddDetection(Player, "AntiSpeed") then
+			return
+		end
+	end
+end
+
+Players.PlayerAdded:Connect(function(Player)
+	Player.CharacterAdded:Connect(function(Character)
+		SetupCharacter(Player, Character)
+	end)
+end)
+
+for _, Player in ipairs(Players:GetPlayers()) do
+	if Player.Character then
+		task.spawn(SetupCharacter, Player, Player.Character)
+	end
+
+	Player.CharacterAdded:Connect(function(Character)
+		SetupCharacter(Player, Character)
+	end)
+end
+
+return AntiSpeed]]></ProtectedString>
+					<string name="ScriptGuid">{7BF9E5AC-181E-490C-86FD-95F34B869E29}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">AntiSpeed</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX9F421019E81644DD98D8D3CF69199C42">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[local AntiTeleport = {}
+
+local Settings = require(script.Parent.Parent:WaitForChild("Settings"))
+
+if not Settings.Enabled or not Settings.Detection.AntiTeleport then
+	return AntiTeleport
+end
+
+local Punish = require(script.Parent.Parent:WaitForChild("Utils"):WaitForChild("Punish"))
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local PlayerData = {}
+
+local MovementSettings = Settings.Thresholds.Movement
+local RuleSettings = Settings.Thresholds.Rules
+
+local function IsCharacterValid(Character)
+	if not Character then
+		return false
+	end
+
+	local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+	local RootPart = Character:FindFirstChild("HumanoidRootPart")
+
+	return Humanoid and RootPart
+end
+
+local function IsInsideWhitelistedPart(RootPart)
+	for _, Part in ipairs(Settings.Thresholds.MovementWhitelistParts) do
+		if Part and Part:IsA("BasePart") then
+			local Relative = Part.CFrame:PointToObjectSpace(RootPart.Position)
+			local Half = Part.Size / 2
+
+			if math.abs(Relative.X) <= Half.X
+				and math.abs(Relative.Y) <= Half.Y
+				and math.abs(Relative.Z) <= Half.Z then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+local function ResetPlayer(Player)
+	PlayerData[Player] = nil
+end
+
+local function SetupPlayer(Player)
+	Player.CharacterAdded:Connect(function(Character)
+		local Humanoid = Character:WaitForChild("Humanoid")
+		local RootPart = Character:WaitForChild("HumanoidRootPart")
+
+		PlayerData[Player] = {
+			LastPosition = RootPart.Position,
+			LastTime = tick(),
+			TeleportGrace = tick() + 1,
+			BoostTime = 0,
+			BoostPosition = nil,
+			BoostWalkSpeed = 0,
+			FirstTeleportIgnored = false
+		}
+
+		Humanoid.Died:Connect(function()
+			ResetPlayer(Player)
+		end)
+	end)
+end
+
+Players.PlayerAdded:Connect(SetupPlayer)
+
+for _, Player in ipairs(Players:GetPlayers()) do
+	task.spawn(SetupPlayer, Player)
+end
+
+Players.PlayerRemoving:Connect(ResetPlayer)
+
+RunService.Heartbeat:Connect(function(dt)
+	for _, Player in ipairs(Players:GetPlayers()) do
+		local Data = PlayerData[Player]
+		if not Data then continue end
+
+		local Character = Player.Character
+		if not IsCharacterValid(Character) then continue end
+
+		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+		local RootPart = Character:FindFirstChild("HumanoidRootPart")
+
+		if not Humanoid or Humanoid.Health <= 0 or Humanoid.SeatPart then continue end
+
+		local now = tick()
+
+		if IsInsideWhitelistedPart(RootPart) then
+			Data.BoostTime = now
+			Data.BoostPosition = RootPart.Position
+			Data.BoostWalkSpeed = Humanoid.WalkSpeed
+		end
+
+		local current = RootPart.Position
+		local delta = current - Data.LastPosition
+
+		local horizontalDistance = Vector3.new(delta.X, 0, delta.Z).Magnitude
+		local verticalDistance = math.abs(delta.Y)
+
+		local allowedMovement = (Humanoid.WalkSpeed * dt) + MovementSettings.PositionTolerance
+		local inGrace = now <= Data.TeleportGrace
+		local detected = false
+
+		if Data.BoostPosition and (now - Data.BoostTime) <= MovementSettings.GraceTime then
+			local horizontalBoostDelta = Vector3.new(current.X, 0, current.Z) - Vector3.new(Data.BoostPosition.X, 0, Data.BoostPosition.Z)
+			local boostAllowed = (Data.BoostWalkSpeed * (now - Data.BoostTime)) + MovementSettings.PositionTolerance
+
+			if horizontalBoostDelta.Magnitude > boostAllowed then
+				detected = true
+			end
+		else
+			if not inGrace then
+				if horizontalDistance > math.max(allowedMovement, MovementSettings.MaxHorizontalTeleportDistance) then
+					detected = true
+				end
+
+				if verticalDistance > MovementSettings.MaxVerticalTeleportDistance then
+					if RootPart.AssemblyLinearVelocity.Y > -5 then
+						detected = true
+					end
+				end
+			end
+		end
+
+		if detected then
+			if RuleSettings.IgnoreFirstTeleport and not Data.FirstTeleportIgnored then
+				Data.FirstTeleportIgnored = true
+				Data.LastPosition = current
+				Data.LastTime = now
+				continue
+			end
+
+			Character:PivotTo(CFrame.new(Data.LastPosition))
+
+			if Punish:AddDetection(Player, "AntiTeleport") then
+				return
+			end
+		else
+			Data.LastPosition = current
+			Data.LastTime = now
+		end
+	end
+end)
+
+return AntiTeleport]]></ProtectedString>
+					<string name="ScriptGuid">{B47BFEF1-134A-44DE-A424-793577DC0B8C}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">AntiTeleport</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX15955E301175423EAA8548A588E9044D">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[local AntiGodMode = {}
+
+local Settings = require(script.Parent.Parent:WaitForChild("Settings"))
+
+if not Settings.Enabled or not Settings.Detection.AntiGodMode then
+	return AntiGodMode
+end
+
+local Punish = require(script.Parent.Parent:WaitForChild("Utils"):WaitForChild("Punish"))
+
+local Players = game:GetService("Players")
+
+local GodModeSettings = {
+	AllowedHealMargin = 1,
+	MinDeathHealth = 0.1,
+}
+
+local PlayerData = {}
+
+local function ResetPlayer(Player)
+	PlayerData[Player] = nil
+end
+
+local function SetupPlayer(Player)
+	Player.CharacterAdded:Connect(function(Character)
+		local Humanoid = Character:WaitForChild("Humanoid", 5) :: Humanoid
+		if not Humanoid then return end
+
+		task.wait(1)
+
+		if not Character or not Character.Parent then return end
+
+		PlayerData[Player] = {
+			LastHealth = Humanoid.Health
+		}
+
+		local HealthChangedConn
+		HealthChangedConn = Humanoid.HealthChanged:Connect(function(CurrentHealth)
+			if not Character or not Character.Parent then
+				if HealthChangedConn then HealthChangedConn:Disconnect() end
+				return
+			end
+
+			local Data = PlayerData[Player]
+			if not Data then return end
+
+			local LastHealth = Data.LastHealth
+
+			if CurrentHealth > LastHealth + GodModeSettings.AllowedHealMargin then
+				local IsSeated = Humanoid.SeatPart ~= nil
+
+				if CurrentHealth == Humanoid.MaxHealth and LastHealth <= GodModeSettings.MinDeathHealth and not IsSeated then
+					if Punish:AddDetection(Player, "AntiGodMode") then
+						if HealthChangedConn then HealthChangedConn:Disconnect() end
+						return
+					end
+				end
+			end
+
+			Data.LastHealth = CurrentHealth
+		end)
+
+		local DestroyingConn
+		DestroyingConn = Character.Destroying:Connect(function()
+			if HealthChangedConn then HealthChangedConn:Disconnect() end
+			DestroyingConn:Disconnect()
+		end)
+	end)
+end
+
+Players.PlayerAdded:Connect(SetupPlayer)
+
+for _, Player in ipairs(Players:GetPlayers()) do
+	task.spawn(SetupPlayer, Player)
+end
+
+Players.PlayerRemoving:Connect(ResetPlayer)
+
+return AntiGodMode]]></ProtectedString>
+					<string name="ScriptGuid">{7E7C1AAA-4EE7-4B8C-8841-02F959F6A4F3}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">AntiGodMode</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX4E44B07B6E6B4D389627D663C96114CD">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[local AntiRemoteSpam = {}
+
+local Settings = require(script.Parent.Parent:WaitForChild("Settings"))
+local Punish = require(script.Parent.Parent:WaitForChild("Utils"):WaitForChild("Punish"))
+local Players = game:GetService("Players")
+
+local RemoteLimits = {}
+local MAX_REQUESTS = Settings.Thresholds.Remote.MaxRequests
+local TIME_WINDOW = Settings.Thresholds.Remote.TimeWindow
+
+local function ResetPlayer(Player)
+	RemoteLimits[Player] = nil
+end
+
+Players.PlayerRemoving:Connect(ResetPlayer)
+
+function AntiRemoteSpam.Hook(RemoteEvent)
+	local OriginalFire = RemoteEvent.OnServerEvent
+
+	RemoteEvent.OnServerEvent = function(Player, ...)
+		local now = tick()
+		local data = RemoteLimits[Player] or { Requests = 0, LastReset = now }
+
+		if now - data.LastReset > TIME_WINDOW then
+			data.Requests = 1
+			data.LastReset = now
+		else
+			data.Requests += 1
+			if data.Requests > MAX_REQUESTS then
+				if Punish:AddDetection(Player, "AntiRemoteSpam") then
+					return
+				end
+			end
+		end
+
+		RemoteLimits[Player] = data
+		OriginalFire(Player, ...)
+	end
+end
+
+return AntiRemoteSpam]]></ProtectedString>
+					<string name="ScriptGuid">{14C85DA3-C02D-407E-A2F8-3B2E609B13DE}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">AntiRemoteSpam</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX55DF8E05A4A7432B84312B024BF35CCA">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[local AntiReach = {}
+
+local Settings = require(script.Parent.Parent:WaitForChild("Settings"))
+if not Settings.Enabled or not Settings.Detection.AntiReach then
+	return AntiReach
+end
+
+local Punish = require(script.Parent.Parent:WaitForChild("Utils"):WaitForChild("Punish"))
+
+local MAX_REACH = 7
+
+function AntiReach.Validate(Attacker, Victim)
+	local AttackerRoot = Attacker:FindFirstChild("HumanoidRootPart")
+	local VictimRoot = Victim:FindFirstChild("HumanoidRootPart")
+
+	if not AttackerRoot or not VictimRoot then return false end
+
+	local Distance = (AttackerRoot.Position - VictimRoot.Position).Magnitude
+
+	if Distance > MAX_REACH then
+		if Punish:AddDetection(Attacker, "AntiReach") then
+			return false
+		end
+	end
+
+	return true
+end
+
+return AntiReach]]></ProtectedString>
+					<string name="ScriptGuid">{630ACDFB-7FDB-4B0F-92C2-4AFC269F8E81}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">AntiReach</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+		</Item>
+		<Item class="Folder" referent="RBX2BAF0370A4E74E79B2E1C37B9E8C1BB9">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">Utils</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+			<Item class="ModuleScript" referent="RBX48142F1729914F59A833C314672DA6BE">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[local Punish = {}
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Notify = ReplicatedStorage:WaitForChild("VS-Remotes"):WaitForChild("NotifyEvent")
+
+local Settings = require(script.Parent.Parent:WaitForChild("Settings"))
+
+local Messages = {
+	"potato firewall didnt like that",
+	"u pressed the wrong thing bro",
+	"server hamster lost trust",
+	"pixels reported u",
+	"anti noob system said no",
+	"spaghetti code fought back",
+	"skill dlc missing",
+	"wizard removed ur perms",
+	"button got offended",
+	"secret ban ending unlocked",
+	"anti cheat dragon said no",
+	"that was dumb",
+	"lua spirits angry",
+	"ducks are disappointed",
+	"firewall facepalmed",
+	"clown protocol active",
+	"anti cheese denied u",
+	"that did nothing btw",
+	"ninjas got u",
+	"common sense missing",
+	"server said nah",
+	"lego incident",
+	"too much confidence",
+	"raccoon stole access",
+	"server laughed at u",
+	"shadow realm time",
+	"spaghetti dimension said no",
+	"not the chosen one",
+	"rubber ducks stopped u",
+	"spirits shaking heads",
+	"wifi ghosts detected",
+	"404 brain not found",
+	"keyboard cried for help",
+	"ur luck expired",
+	"bad idea generator active",
+	"cheese pass revoked",
+	"banana security triggered",
+	"server duck attacked",
+	"that aint gonna work",
+	"gravity reported u",
+	"packet inspector laughing",
+	"minecraft villager disagreed",
+	"admin raccoon watching",
+	"toaster security online",
+	"mission failed horribly",
+	"void goblins noticed u",
+	"cpu overheating from stupidity",
+	"keyboard warrior defeated",
+	"air molecules suspicious",
+	"wormhole denied request",
+	"frog army intervened",
+	"security potato evolved",
+	"access card exploded",
+	"magic smoke escaped",
+	"server cat hissed",
+	"error 123 skill issue",
+	"lua wizard disappointed",
+	"anti exploit goblin angry",
+	"hamster fell off wheel",
+	"banana peel detected",
+	"security turtle too fast",
+	"ur permissions evaporated",
+	"chair anti cheat enabled",
+	"code monkeys upset",
+	"invisible wall wins again",
+	"wifi raccoon stole packets",
+	"kernel panic emotionally",
+	"ur aura got detected",
+	"developer sigh detected",
+	"system integrity laughing",
+	"void seal activated",
+	"spoon protocol denied",
+	"mouse disconnected spiritually",
+	"npc council voted no",
+	"bad vibes detected",
+	"rubber chicken defense active",
+	"anti fun barrier enabled",
+	"keyboard exploded internally",
+	"quantum duck intervened",
+	"ur exploit tripped itself",
+	"packet goblins confused",
+	"server spine broke",
+	"admin fish watching closely",
+	"nah bro caught in 4k",
+	"security banana armed",
+	"too goofy detected",
+	"anti clown shield active",
+	"rat detector online",
+	"ur script folded instantly",
+	"lua itself rejected u",
+	"ur exploit needs therapy",
+	"ghosts unplugged ur access",
+	"anti weird system triggered",
+	"meme firewall blocked u",
+	"dragon firewall awakened",
+	"code spirits screaming",
+	"anti monkey protocol active",
+	"reality patch successful",
+	"ur bypass bypassed itself",
+	"clouds reported suspicious activity",
+	"server lost patience",
+	"that exploit from temu?",
+	"void gods disapproved",
+	"admin hamster spinning violently",
+	"critical bruh moment",
+	"anti tomfoolery activated",
+	"security raccoon eating wires",
+	"system.exe stopped believing in u"
+}
+
+local Prefix = "[Void-Sentinel]: "
+
+local DetectionData = {}
+local DetectionCooldowns = {}
+
+local DETECTION_COOLDOWN = 5
+
+local function GetMax()
+	return (Settings.Punishments and Settings.Punishments.MaxDetections) or 3
+end
+
+function Punish:Reset(Player)
+	DetectionData[Player] = nil
+	DetectionCooldowns[Player] = nil
+end
+
+function Punish:Warn(Player, DetectionName, Count, Max)
+	if not Player then
+		return
+	end
+
+	local TextMessage = string.format(
+		"Detected by %s (%d/%d)",
+		tostring(DetectionName),
+		Count or 1,
+		Max or GetMax()
+	)
+
+	Notify:FireClient(Player, Prefix, TextMessage)
+end
+
+function Punish:Kick(Player, DetectionName, CustomReason)
+	if not Player then
+		return
+	end
+
+	local Reason = CustomReason or Messages[math.random(1, #Messages)]
+	local Message = Prefix .. Reason .. "\nDetection: " .. tostring(DetectionName)
+
+	Player:Kick(Message)
+end
+
+function Punish:AddDetection(Player, DetectionName)
+	if not Player then
+		return false
+	end
+
+	local now = tick()
+
+	DetectionCooldowns[Player] = DetectionCooldowns[Player] or 0
+
+	if now - DetectionCooldowns[Player] < DETECTION_COOLDOWN then
+		return false
+	end
+
+	DetectionCooldowns[Player] = now
+
+	local MaxDetections = GetMax()
+
+	DetectionData[Player] = DetectionData[Player] or {}
+	local Data = DetectionData[Player]
+
+	Data[DetectionName] = Data[DetectionName] or 0
+
+	if Data[DetectionName] >= MaxDetections then
+		return true
+	end
+
+	Data[DetectionName] += 1
+
+	local Count = Data[DetectionName]
+
+	self:Warn(Player, DetectionName, Count, MaxDetections)
+
+	if Count >= MaxDetections then
+		task.delay(2, function()
+			if Player and Player.Parent then
+				self:Kick(Player, DetectionName)
+			end
+		end)
+
+		return true
+	end
+
+	return false
+end
+
+Players.PlayerRemoving:Connect(function(Player)
+	Punish:Reset(Player)
+end)
+
+return Punish]]></ProtectedString>
+					<string name="ScriptGuid">{82E99AC1-074F-4499-AEEB-D5A957BF10A5}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">Punish</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+		</Item>
+		<Item class="Folder" referent="RBXA25822B82B8B45AF8942B2C4EAD43CDC">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">VS-Client</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+			<Item class="LocalScript" referent="RBXBE84965951EF4781B18FB58692572A7D">
+				<Properties>
+					<ProtectedString name="Source"><![CDATA[if not game:IsLoaded() then game.Loaded:Wait() end
+
+local Event = game:GetService("ReplicatedStorage"):WaitForChild("VS-Remotes"):WaitForChild("NotifyEvent")
+
+Event.OnClientEvent:Connect(function(title, text, dur)
+
+	local ok, err = pcall(function()
+		game:GetService("StarterGui"):SetCore("SendNotification", {
+			Title = tostring(title or "Notification"),
+			Text = tostring(text or ""),
+			Duration = tonumber(dur) or 3
+		})
+	end)
+
+	if not ok then
+		warn("[Notify System Failed]:", err)
+	end
+end)]]></ProtectedString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<token name="RunContext">0</token>
+					<string name="ScriptGuid">{0F192119-FCC3-47E3-88EC-2E39028F463C}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+					<bool name="DefinesCapabilities">true</bool>
+					<string name="Name">Notify</string>
+					<int64 name="SourceAssetId">13789533258</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+		</Item>
+		<Item class="Folder" referent="RBX64FAE1165FA94EF3899508F5DDCC50A6">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">VS-Remotes</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+			<Item class="RemoteEvent" referent="RBX4EF79A9B03664821AB88CC66A74DB0FF">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+					<bool name="DefinesCapabilities">true</bool>
+					<string name="Name">NotifyEvent</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+		</Item>
+	</Item>
+</roblox>
