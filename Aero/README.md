@@ -1,12 +1,10 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/its-starflow/Aero/Core/Images/Logo.png" width="250" alt="Aero Logo">
-</p>
+<p align="center">  
+  <img src="https://raw.githubusercontent.com/its-starflow/Aero/Core/Images/Logo.png" width="250" alt="Aero Logo">  
+</p>  
 
-> Version: 0.5
+> Version: 0.5  
 
 Aero is a clean and simple GUI library for Roblox focused on being easy to use and easy to customize.
-
-It works in both executors and Roblox Studio without needing different setup code.
 
 ---
 
@@ -39,11 +37,29 @@ local Aero = loadstring(game:HttpGet("https://raw.githubusercontent.com/its-star
 
 ## Method 2 — ModuleScript
 
-1. Download the Aero.rbxmx file.
-2. Drag and drop the file into your Roblox game's workspace.
-5. Put it somewhere like `ReplicatedStorage`
+1. Download the `Aero.rbxmx` file.
+2. Drag and drop the file into your Roblox game.
+3. Place it anywhere you want in your project.
 
-Require it from a LocalScript:
+Examples:
+
+```text
+ReplicatedStorage.Aero
+ReplicatedStorage.Libraries.Aero
+StarterPlayer.StarterPlayerScripts.Aero
+YourProject.Libraries.Aero
+Workspace.Modules.Aero
+```
+
+Aero is **not limited to `ReplicatedStorage`** — it can be stored anywhere as long as your script can access it.
+
+Require it from a `LocalScript`:
+
+```lua
+local Aero = require(game.YourProject.Libraries.Aero)
+```
+
+Example using `ReplicatedStorage`:
 
 ```lua
 local Aero = require(game.ReplicatedStorage.Aero)
