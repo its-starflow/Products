@@ -30,7 +30,7 @@ You are free to explore, download, and use these projects for personal use or le
 
 ## License
 
-This project is licensed under the terms described in the LICENSE file.
+This project is licensed under the terms described in the `License.md` file.
 
 ---
 
