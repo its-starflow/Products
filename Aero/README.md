@@ -43,7 +43,7 @@ local Aero = loadstring(game:HttpGet("https://raw.githubusercontent.com/its-star
 
 Examples:
 
-```lua
+```
 ReplicatedStorage.Aero
 ReplicatedStorage.Libraries.Aero
 StarterPlayer.StarterPlayerScripts.Aero
